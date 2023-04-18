@@ -16,9 +16,10 @@ class MainApp extends StatelessWidget {
       create: (_) => BmiProvider(),
       child: MaterialApp(
         theme: ThemeData.dark().copyWith(
-            primaryColor: const Color.fromARGB(255, 5, 148, 83),
-            scaffoldBackgroundColor: Colors.black,
-            appBarTheme: const AppBarTheme(backgroundColor: Colors.black)),
+          primaryColor: const Color.fromARGB(255, 5, 148, 83),
+          scaffoldBackgroundColor: Colors.black,
+          appBarTheme: const AppBarTheme(backgroundColor: Colors.black),
+        ),
         home: const HomePage(),
         debugShowCheckedModeBanner: false,
       ),

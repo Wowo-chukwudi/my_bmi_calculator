@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:my_bmi_calculator/component/color_cards.dart';
+import 'package:my_bmi_calculator/component/gender_card.dart';
+import 'package:my_bmi_calculator/component/input_card.dart';
+import 'package:my_bmi_calculator/component/reuse_card.dart';
 import 'package:my_bmi_calculator/component/unit_card.dart';
 import 'package:my_bmi_calculator/model/bmi_provider.dart';
-import 'package:my_bmi_calculator/model/calculator.dart';
 import 'package:my_bmi_calculator/model/gender_enum.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_bmi_calculator/screens/result_page.dart';
 import 'package:provider/provider.dart';
-
-import '../component/gender_card.dart';
-import '../component/input_card.dart';
-import '../component/reuse_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,21 +18,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final cardColor = const Color.fromARGB(255, 57, 58, 71);
-  final labelColor = Color.fromARGB(255, 219, 219, 220);
-  final greenColor = const Color.fromARGB(255, 5, 148, 83);
-  Gender? gender;
-
-  int weight = 56;
-  int height = 120;
-  int age = 24;
-
   @override
   Widget build(BuildContext context) {
+    //* I created an instance the gender enum so that i can use it for this color logic here and also
+    //* To populate the places where i need an instance of the gender enum
+    final gender = context.watch<BmiProvider>().gender;
     Color maleColor = gender == Gender.male ? greenColor : cardColor;
     Color femaleColor = gender == Gender.female ? greenColor : cardColor;
-    return Consumer<BmiProvider>(builder: ((context, value, child) {
-      return Scaffold(
+    return Consumer<BmiProvider>(
+      builder: ((context, value, child) {
+        return Scaffold(
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {},
@@ -48,7 +42,11 @@ class _HomePageState extends State<HomePage> {
             elevation: 0.0,
           ),
           body: Padding(
-            padding: const EdgeInsets.only(top: 20, left: 30, right: 20),
+            padding: const EdgeInsets.only(
+              top: 20,
+              left: 30,
+              right: 20,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -56,13 +54,18 @@ class _HomePageState extends State<HomePage> {
                   margin: const EdgeInsets.only(bottom: 30),
                   child: const Text(
                     'BMI Calculator',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                Text(
+                const Text(
                   'Gender',
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, color: labelColor),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: labelColor,
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -71,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                       child: GestureDetector(
                         child: ReuseCard(
                           onTap: () {
-                            const gender = Gender.male;
+                            value.gender = Gender.male;
                             value.chooseGender(gender);
                           },
                           color: cardColor,
@@ -85,7 +88,8 @@ class _HomePageState extends State<HomePage> {
                       child: GestureDetector(
                         child: ReuseCard(
                           onTap: () {
-                            value.chooseGender(Gender.female);
+                            value.gender = Gender.female;
+                            value.chooseGender(gender);
                           },
                           color: cardColor,
                           borderColor: femaleColor,
@@ -101,72 +105,65 @@ class _HomePageState extends State<HomePage> {
                   labelColor: labelColor,
                   label: 'Weight',
                   unit: const UnitCard(label: 'kg'),
-                  value: weight,
+                  value: value.weight,
                   onTapPlus: () {
-                    context.read<BmiProvider>().increment();
+                    value.weightIncrement();
                   },
                   onTapMinus: () {
-                    context.read<BmiProvider>().decrement(weight);
+                    value.weightDecrement();
                   },
                 ),
                 InputCard(
                   labelColor: labelColor,
                   label: 'Height',
                   unit: const UnitCard(label: 'cm'),
-                  value: height,
+                  value: value.height,
                   onTapPlus: () {
-                    context.read<BmiProvider>().increment();
+                    value.heightIncrement();
                   },
                   onTapMinus: () {
-                    context.read<BmiProvider>().decrement(height);
+                    value.heightDecrement();
                   },
                 ),
                 InputCard(
                   labelColor: labelColor,
                   label: 'Age',
-                  value: age,
+                  value: value.age,
                   onTapPlus: () {
-                    context.read<BmiProvider>().increment();
+                    value.ageIncrement();
                   },
                   onTapMinus: () {
-                    context.read<BmiProvider>().decrement(age);
+                    value.ageDecrement();
                   },
                 ),
-                Consumer<BmiProvider>(builder: (context, value, child) {
-                  return Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: greenColor,
+                Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: greenColor,
+                  ),
+                  child: TextButton(
+                    child: const Text(
+                      'Calculate',
+                      style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
-                    child: TextButton(
-                      child: const Text(
-                        'Calculate',
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                      onPressed: () {
-                        // // final bmi = CalculateBmi(weight, height);
-                        // // context.read<BmiProvider>().calculator(bmi);
-                        // final bmi = CalculateBmi(weight, height);
-                        // final result = value.calculator(bmi);
-
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => ResultPage(
-                        //       bmiResult: context.read<BmiProvider>().calculator(bmi),
-                        //       interpretation: value.getInterpretation(),
-                        //     ),
-                        //   ),
-                        // );
-                      },
-                    ),
-                  );
-                })
+                    onPressed: () {
+                      value.calculator();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ResultPage(),
+                        ),
+                      );
+                    },
+                  ),
+                )
               ],
             ),
-          ));
-    }));
+          ),
+        );
+      }),
+    );
   }
 }
