@@ -5,10 +5,10 @@ import 'dart:math';
 import 'package:provider/provider.dart';
 
 class BmiProvider extends ChangeNotifier {
-  int weight = 9;
+  int weight = 60;
   int height = 120;
-  int age = 78;
-  double result = 0.0;
+  int age = 24;
+  double result = 20.0;
   String status = '';
 
   void chooseGender(Gender gender) {
@@ -40,13 +40,13 @@ class BmiProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void calculator(CalculateBmi value) {
-    result = value.weight / pow(value.height / 100, 2);
-
+  String calculator() {
+    result = weight / pow(height / 100, 2);
+    return result.toStringAsFixed(2);
     notifyListeners();
   }
 
-  void getStatus() {
+  String getStatus() {
     if (result <= 18.5) {
       status = 'UnderWeight';
     } else if (result >= 24.9) {
@@ -54,18 +54,16 @@ class BmiProvider extends ChangeNotifier {
     } else {
       status = 'Overweight';
     }
-
-    notifyListeners();
+    return status;
   }
 
-  void getInterpretation() {
+  String getInterpretation() {
     if (result <= 18.5) {
-      'Please eattttt';
+      return 'Please eattttt';
     } else if (result <= 24.9) {
-      'For your height, a normal weight range would be from 48.6 to 65.3 kg.\n\nYour BMI is $result, indicating your weight is in the $status category for adults of your height.\n\nMaintaining a healthy weight may reduce the risk of chronic diseases associated with overweight and obesity.';
+      return 'For your height, a normal weight range would be from 48.6 to 65.3 kg.\n\nYour BMI is $result, indicating your weight is in the $status category for adults of your height.\n\nMaintaining a healthy weight may reduce the risk of chronic diseases associated with overweight and obesity.';
     } else {
-      'Fatso, start exercising';
+      return 'Fatso, start exercising';
     }
-    notifyListeners();
   }
 }

@@ -22,10 +22,9 @@ class _HomePageState extends State<HomePage> {
   final cardColor = const Color.fromARGB(255, 57, 58, 71);
   final labelColor = Color.fromARGB(255, 219, 219, 220);
   final greenColor = const Color.fromARGB(255, 5, 148, 83);
-
+  Gender? gender;
   @override
   Widget build(BuildContext context) {
-    Gender? gender;
     return Consumer<BmiProvider>(builder: ((context, value, child) {
       Color maleColor = gender == Gender.male ? greenColor : cardColor;
       Color femaleColor = gender == Gender.female ? greenColor : cardColor;
@@ -68,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                         child: ReuseCard(
                           onTap: () {
                             gender = Gender.male;
-                            context.read<BmiProvider>().chooseGender(gender!);
+                            value.chooseGender(gender!);
                           },
                           color: cardColor,
                           borderColor: maleColor,
@@ -82,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                         child: ReuseCard(
                           onTap: () {
                             gender = Gender.female;
-                            context.read<BmiProvider>().chooseGender(gender!);
+                            value.chooseGender(gender!);
                           },
                           color: cardColor,
                           borderColor: femaleColor,
@@ -101,10 +100,10 @@ class _HomePageState extends State<HomePage> {
                   values: value.weight,
                   onTapPlus: () {
                     //value.increaseWeight();
-                    context.read<BmiProvider>().increment(value.weight);
+                    value.increment(value.weight);
                   },
                   onTapMinus: () {
-                    context.read<BmiProvider>().decrement(value.weight);
+                    value.decrement(value.weight);
                   },
                 ),
                 InputCard(
@@ -113,10 +112,10 @@ class _HomePageState extends State<HomePage> {
                   unit: const UnitCard(label: 'cm'),
                   values: value.height,
                   onTapPlus: () {
-                    context.read<BmiProvider>().increment(value.height);
+                    value.increment(value.height);
                   },
                   onTapMinus: () {
-                    context.read<BmiProvider>().decrement(value.height);
+                    value.decrement(value.height);
                   },
                 ),
                 InputCard(
@@ -124,10 +123,10 @@ class _HomePageState extends State<HomePage> {
                   label: 'Age',
                   values: value.age,
                   onTapPlus: () {
-                    context.read<BmiProvider>().increment(value.age);
+                    value.increment(value.age);
                   },
                   onTapMinus: () {
-                    context.read<BmiProvider>().decrement(value.age);
+                    value.decrement(value.age);
                   },
                 ),
                 Container(
@@ -143,20 +142,15 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                     onPressed: () {
-                      // // final bmi = CalculateBmi(weight, height);
-                      // // context.read<BmiProvider>().calculator(bmi);
-                      // final bmi = CalculateBmi(weight, height);
-                      // final result = value.calculator(bmi);
-
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => ResultPage(
-                      //       bmiResult: context.read<BmiProvider>().calculator(bmi),
-                      //       interpretation: value.getInterpretation(),
-                      //     ),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ResultPage(
+                            bmiResult: value.calculator(),
+                            interpretation: value.getInterpretation(),
+                          ),
+                        ),
+                      );
                     },
                   ),
                 )

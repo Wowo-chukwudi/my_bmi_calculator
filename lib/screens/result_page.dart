@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_bmi_calculator/model/bmi_provider.dart';
+import 'package:provider/provider.dart';
 
 class ResultPage extends StatelessWidget {
   const ResultPage(
@@ -11,6 +13,7 @@ class ResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bmiProvider = context.watch<BmiProvider>();
     return Scaffold(
       appBar: AppBar(
         actions: [
