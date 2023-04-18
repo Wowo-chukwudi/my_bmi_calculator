@@ -5,29 +5,38 @@ import 'dart:math';
 import 'package:provider/provider.dart';
 
 class BmiProvider extends ChangeNotifier {
+  int weight = 9;
+  int height = 120;
+  int age = 78;
   double result = 0.0;
   String status = '';
-  int weight = 50;
 
   void chooseGender(Gender gender) {
-    if (gender == Gender.male) {
-      gender = Gender.male;
-    } else {
-      gender = Gender.female;
-    }
     gender;
     notifyListeners();
   }
 
-  void increment() {
-    weight++;
-
+  void increment(int values) {
+    if (values == weight) {
+      weight++;
+    } else if (values == height) {
+      height++;
+    } else if (values == age) {
+      age++;
+    }
+    values++;
     notifyListeners();
   }
 
-  void decrement(int value) {
-    value--;
-
+  void decrement(int values) {
+    if (values == weight) {
+      weight--;
+    } else if (values == height) {
+      height--;
+    } else if (values == age) {
+      age--;
+    }
+    values++;
     notifyListeners();
   }
 

@@ -22,17 +22,13 @@ class _HomePageState extends State<HomePage> {
   final cardColor = const Color.fromARGB(255, 57, 58, 71);
   final labelColor = Color.fromARGB(255, 219, 219, 220);
   final greenColor = const Color.fromARGB(255, 5, 148, 83);
-  Gender? gender;
-
-  int weight = 56;
-  int height = 120;
-  int age = 24;
 
   @override
   Widget build(BuildContext context) {
-    Color maleColor = gender == Gender.male ? greenColor : cardColor;
-    Color femaleColor = gender == Gender.female ? greenColor : cardColor;
+    Gender? gender;
     return Consumer<BmiProvider>(builder: ((context, value, child) {
+      Color maleColor = gender == Gender.male ? greenColor : cardColor;
+      Color femaleColor = gender == Gender.female ? greenColor : cardColor;
       return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -71,8 +67,8 @@ class _HomePageState extends State<HomePage> {
                       child: GestureDetector(
                         child: ReuseCard(
                           onTap: () {
-                            const gender = Gender.male;
-                            value.chooseGender(gender);
+                            gender = Gender.male;
+                            context.read<BmiProvider>().chooseGender(gender!);
                           },
                           color: cardColor,
                           borderColor: maleColor,
@@ -85,7 +81,8 @@ class _HomePageState extends State<HomePage> {
                       child: GestureDetector(
                         child: ReuseCard(
                           onTap: () {
-                            value.chooseGender(Gender.female);
+                            gender = Gender.female;
+                            context.read<BmiProvider>().chooseGender(gender!);
                           },
                           color: cardColor,
                           borderColor: femaleColor,
@@ -101,69 +98,68 @@ class _HomePageState extends State<HomePage> {
                   labelColor: labelColor,
                   label: 'Weight',
                   unit: const UnitCard(label: 'kg'),
-                  value: weight,
+                  values: value.weight,
                   onTapPlus: () {
-                    context.read<BmiProvider>().increment();
+                    //value.increaseWeight();
+                    context.read<BmiProvider>().increment(value.weight);
                   },
                   onTapMinus: () {
-                    context.read<BmiProvider>().decrement(weight);
+                    context.read<BmiProvider>().decrement(value.weight);
                   },
                 ),
                 InputCard(
                   labelColor: labelColor,
                   label: 'Height',
                   unit: const UnitCard(label: 'cm'),
-                  value: height,
+                  values: value.height,
                   onTapPlus: () {
-                    context.read<BmiProvider>().increment();
+                    context.read<BmiProvider>().increment(value.height);
                   },
                   onTapMinus: () {
-                    context.read<BmiProvider>().decrement(height);
+                    context.read<BmiProvider>().decrement(value.height);
                   },
                 ),
                 InputCard(
                   labelColor: labelColor,
                   label: 'Age',
-                  value: age,
+                  values: value.age,
                   onTapPlus: () {
-                    context.read<BmiProvider>().increment();
+                    context.read<BmiProvider>().increment(value.age);
                   },
                   onTapMinus: () {
-                    context.read<BmiProvider>().decrement(age);
+                    context.read<BmiProvider>().decrement(value.age);
                   },
                 ),
-                Consumer<BmiProvider>(builder: (context, value, child) {
-                  return Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: greenColor,
+                Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: greenColor,
+                  ),
+                  child: TextButton(
+                    child: const Text(
+                      'Calculate',
+                      style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
-                    child: TextButton(
-                      child: const Text(
-                        'Calculate',
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                      onPressed: () {
-                        // // final bmi = CalculateBmi(weight, height);
-                        // // context.read<BmiProvider>().calculator(bmi);
-                        // final bmi = CalculateBmi(weight, height);
-                        // final result = value.calculator(bmi);
+                    onPressed: () {
+                      // // final bmi = CalculateBmi(weight, height);
+                      // // context.read<BmiProvider>().calculator(bmi);
+                      // final bmi = CalculateBmi(weight, height);
+                      // final result = value.calculator(bmi);
 
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => ResultPage(
-                        //       bmiResult: context.read<BmiProvider>().calculator(bmi),
-                        //       interpretation: value.getInterpretation(),
-                        //     ),
-                        //   ),
-                        // );
-                      },
-                    ),
-                  );
-                })
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => ResultPage(
+                      //       bmiResult: context.read<BmiProvider>().calculator(bmi),
+                      //       interpretation: value.getInterpretation(),
+                      //     ),
+                      //   ),
+                      // );
+                    },
+                  ),
+                )
               ],
             ),
           ));
